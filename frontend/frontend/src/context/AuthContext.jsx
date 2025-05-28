@@ -1,7 +1,8 @@
-import React, { createContext, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
+import AuthContext from './AuthContextInstance';
 
-export const AuthContext = createContext();
+export { AuthContext };
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -12,8 +13,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('token', res.data.token);
   };
 
-  const signup = async (username, password) => {
-    const res = await axios.post('http://localhost:5000/api/auth/signup', { username, password });
+  const signup = async (username, email, password) => {
+    const res = await axios.post('http://localhost:5000/api/auth/signup', { username, email, password });
     setToken(res.data.token);
     localStorage.setItem('token', res.data.token);
   };

@@ -24,10 +24,23 @@ router.get('/', authMiddleware, async (req, res) => {
 });
 
 // Create todo
+// ...existing code...
+
+// Create todo
 router.post('/', authMiddleware, async (req, res) => {
-  const newTodo = await Todo.create({ ...req.body, userId: req.userId });
-  res.status(201).json(newTodo);
+  try {
+    const newTodo = await Todo.create({
+      text: req.body.text,
+      completed: req.body.completed || false,
+      userId: req.userId // <-- Make sure this is set!
+    });
+    res.status(201).json(newTodo);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
+
+// ...existing code...
 
 // Delete todo
 router.delete('/:id', authMiddleware, async (req, res) => {
