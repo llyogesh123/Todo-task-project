@@ -1,36 +1,46 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const dotenv = require('dotenv');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const mongoose = require("mongoose");
 
-dotenv.config();
-
-const authRoutes = require('./routes/auth');
-const todoRoutes = require('./routes/todos');
+const authRoutes = require("./routes/auth");
+const todoRoutes = require("./routes/todos");
 
 const app = express();
-app.use(cors());
-app.use(express.json());
-
 const PORT = process.env.PORT;
 const MONGO_URI = process.env.MONGO_URI;
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
 
-// Connect to MongoDB
-mongoose.connect(MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => {
-  console.log('✅ Connected to MongoDB');
-  // Start the server only after DB connection is successful
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+app.use(express.json());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+app.use("/api/auth", authRoutes);
+app.use("/api/todos", todoRoutes);
+
+mongoose
+  .connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("✅ Connected to MongoDB");
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ Failed to connect to MongoDB:", err);
   });
-})
-.catch((err) => {
-  console.error('❌ Failed to connect to MongoDB:', err);
-});
-
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/todos', todoRoutes);

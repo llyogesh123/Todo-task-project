@@ -10,7 +10,11 @@ export default function Signup() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    await signup(username, email, password);
+    try {
+      await signup(username, email, password); // Pass email too
+    } catch (err) {
+      alert("Signup failed: " + (err.response?.data?.message || err.message));
+    }
   };
 
   return (
