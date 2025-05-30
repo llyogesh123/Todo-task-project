@@ -1,4 +1,4 @@
-"use client"
+
 import React from "react"
 import { Plus, Edit3, X, Sparkles } from "lucide-react"
 

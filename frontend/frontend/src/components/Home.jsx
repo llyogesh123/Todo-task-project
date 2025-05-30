@@ -1,5 +1,3 @@
-"use client"
-
 import React,{ useEffect, useState } from "react"
 import TaskList from "./TaskList"
 import TaskFormModal from "./TaskFormModal"
