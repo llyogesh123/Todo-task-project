@@ -10,19 +10,17 @@ const connectDB = require("./utils/db.js");
 const app = express();
 const PORT = process.env.PORT;
 
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
+// Inserted CORS configuration
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://todo-task-project-1.onrender.com"
+];
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: allowedOrigins,
     credentials: true,
   })
 );
