@@ -2,14 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const mongoose = require("mongoose");
 
-const authRoutes = require("./routes/auth");
-const todoRoutes = require("./routes/todos");
+const authRoute = require("./routes/authRoute.js");
+const taskRoute = require("./routes/taskRoute.js");
+const connectDB = require("./utils/db.js");
 
 const app = express();
 const PORT = process.env.PORT;
-const MONGO_URI = process.env.MONGO_URI;
+
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
 
 app.use(express.json());
@@ -27,20 +27,10 @@ app.use(
   })
 );
 
-app.use("/api/auth", authRoutes);
-app.use("/api/todos", todoRoutes);
+app.use("/auth", authRoute);
+app.use("/tasks", taskRoute);
 
-mongoose
-  .connect(MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("✅ Connected to MongoDB");
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error("❌ Failed to connect to MongoDB:", err);
-  });
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
+  connectDB();
+});

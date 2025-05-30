@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-const JWT_SECRET = process.env.JWT_SECRET || '8f7d1c2e-4b6a-4e2f-9c3d-7a1b2c3d4e5f';
+const JWT_SECRET = process.env.JWT_SECRET;
 
-const authMiddleware = async (req, res, next) => {
+const requireAuth = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization || "";
     const tokenFromHeader = authHeader.startsWith("Bearer ")
@@ -12,7 +12,9 @@ const authMiddleware = async (req, res, next) => {
     const token = (req.cookies && req.cookies.token) || tokenFromHeader;
 
     if (!token) {
-      return res.status(401).json({ message: "Unauthorized: No token provided" });
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: No token provided" });
     }
 
     const decoded = jwt.verify(token, JWT_SECRET);
@@ -24,7 +26,6 @@ const authMiddleware = async (req, res, next) => {
 
     req.clerkId = user.clerkId;
     req.user = user;
-    req.userId = user._id; // For compatibility with other routes
     next();
   } catch (err) {
     console.error("Auth error:", err.message);
@@ -32,4 +33,4 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+module.exports = { requireAuth };
