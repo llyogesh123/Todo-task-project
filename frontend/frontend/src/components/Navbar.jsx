@@ -1,7 +1,7 @@
 "use client"
 
 import { Link, useLocation, useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react"
+import React,{ useEffect, useState } from "react"
 import { useClerk } from "@clerk/clerk-react"
 import { LogOut, Sparkles, User, CheckSquare } from "lucide-react"
 

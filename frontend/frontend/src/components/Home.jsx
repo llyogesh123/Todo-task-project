@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React,{ useEffect, useState } from "react"
 import TaskList from "./TaskList"
 import TaskFormModal from "./TaskFormModal"
 import { Plus, Sparkles, CheckCircle2, Clock, TrendingUp } from "lucide-react"

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React,{ useState } from "react"
 import { Edit3, Trash2, CheckCircle2, Calendar, Clock, Save, X, AlertCircle, Star, Sparkles } from "lucide-react"
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL

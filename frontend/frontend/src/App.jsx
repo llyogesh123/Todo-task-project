@@ -122,7 +122,7 @@ function App() {
             }
           />
           <Route path="/sso-callback" element={<Navigate to="/" replace />} />
-          <Route path="//sso-callback" element={<Navigate to="/" replace />} />
+
         </Routes>
       </Router>
     </div>
